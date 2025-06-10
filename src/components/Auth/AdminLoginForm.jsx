@@ -26,7 +26,7 @@ const AdminLoginForm = ({ onSwitchToUser }) => {
             <div className="mx-auto h-16 w-16 bg-amber-100 rounded-full flex items-center justify-center mb-4">
               <Crown className="h-8 w-8 text-amber-600" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Admin Portal</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">PEHENNAWA Admin</h2>
             <p className="text-gray-600">Administrative access only</p>
           </div>
 
@@ -94,9 +94,9 @@ const AdminLoginForm = ({ onSwitchToUser }) => {
             </div>
 
             <div className="mt-6 bg-amber-50 rounded-lg p-4 border border-amber-200">
-              <p className="text-xs text-amber-800 mb-2 font-medium">Admin Demo Credentials:</p>
-              <p className="text-xs text-amber-700">Email: admin@costumeworld.com</p>
-              <p className="text-xs text-amber-700">Password: password</p>
+              <p className="text-xs text-amber-800 mb-2 font-medium">Admin Access:</p>
+              <p className="text-xs text-amber-700">Email: pehennawa@gmail.com</p>
+              <p className="text-xs text-amber-700">Password: 12251523@aasg</p>
             </div>
           </form>
         </div>

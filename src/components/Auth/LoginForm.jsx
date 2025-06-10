@@ -23,7 +23,7 @@ const LoginForm = ({ onSwitchToSignup, onSwitchToAdmin }) => {
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to PEHENNAWA</h2>
             <p className="text-gray-600">Sign in to your account</p>
           </div>
 

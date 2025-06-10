@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, DollarSign, Star, Tag } from 'lucide-react';
+import { Calendar, DollarSign, Star, Tag, Package } from 'lucide-react';
 
 const CostumeCard = ({ 
   costume, 
@@ -12,6 +12,8 @@ const CostumeCard = ({
     good: 'bg-yellow-100 text-yellow-800',
     fair: 'bg-orange-100 text-orange-800'
   };
+
+  const isAvailable = costume.quantity > 0;
 
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
@@ -26,10 +28,18 @@ const CostumeCard = ({
             {costume.condition}
           </span>
         </div>
-        {!costume.available && (
+        <div className="absolute top-4 left-4">
+          <div className="flex items-center space-x-1 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+            <Package className="h-4 w-4 text-purple-600" />
+            <span className="text-sm font-medium text-gray-700">
+              {costume.quantity}/{costume.totalQuantity}
+            </span>
+          </div>
+        </div>
+        {!isAvailable && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <span className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium">
-              Currently Rented
+              Out of Stock
             </span>
           </div>
         )}
@@ -72,15 +82,15 @@ const CostumeCard = ({
             </button>
           ) : (
             <button
-              onClick={() => costume.available && onRent?.(costume)}
-              disabled={!costume.available}
+              onClick={() => isAvailable && onRent?.(costume)}
+              disabled={!isAvailable}
               className={`flex-1 font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                costume.available
+                isAvailable
                   ? 'bg-purple-600 hover:bg-purple-700 text-white focus:ring-purple-500'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
-              {costume.available ? 'Rent Now' : 'Unavailable'}
+              {isAvailable ? 'Rent Now' : 'Out of Stock'}
             </button>
           )}
         </div>

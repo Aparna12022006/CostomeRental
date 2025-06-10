@@ -8,6 +8,7 @@ import AdminDashboard from './components/Admin/AdminDashboard.jsx';
 import AddCostume from './components/Admin/AddCostume.jsx';
 import CostumeCatalog from './components/User/CostumeCatalog.jsx';
 import MyRentals from './components/User/MyRentals.jsx';
+import UserProfile from './components/User/UserProfile.jsx';
 import RentalModal from './components/RentalModal.jsx';
 import { mockCostumes, mockRentals } from './data/mockData.js';
 
@@ -45,7 +46,7 @@ function AppContent() {
     setSelectedCostume(costume);
   };
 
-  const handleConfirmRental = (startDate, endDate, totalCost) => {
+  const handleConfirmRental = (startDate, endDate, totalCost, paymentMethod) => {
     if (!user || !selectedCostume) return;
 
     const newRental = {
@@ -55,14 +56,31 @@ function AppContent() {
       startDate,
       endDate,
       status: 'active',
-      totalCost
+      totalCost,
+      paymentMethod
     };
 
     setRentals([...rentals, newRental]);
+    
+    // Decrease available quantity
     setCostumes(costumes.map(c => 
-      c.id === selectedCostume.id ? { ...c, available: false } : c
+      c.id === selectedCostume.id 
+        ? { 
+            ...c, 
+            quantity: c.quantity - 1,
+            available: c.quantity - 1 > 0
+          } 
+        : c
     ));
+    
     setSelectedCostume(null);
+
+    // Simulate payment processing for online payments
+    if (paymentMethod === 'online') {
+      alert('Payment processed successfully! Your costume rental is confirmed.');
+    } else {
+      alert('Rental confirmed! You can pay cash on delivery.');
+    }
   };
 
   const handleReturnCostume = (rentalId) => {
@@ -72,8 +90,16 @@ function AppContent() {
     setRentals(rentals.map(r => 
       r.id === rentalId ? { ...r, status: 'returned' } : r
     ));
+    
+    // Increase available quantity
     setCostumes(costumes.map(c => 
-      c.id === rental.costumeId ? { ...c, available: true } : c
+      c.id === rental.costumeId 
+        ? { 
+            ...c, 
+            quantity: c.quantity + 1,
+            available: true
+          } 
+        : c
     ));
   };
 
@@ -84,8 +110,16 @@ function AppContent() {
     setRentals(rentals.map(r => 
       r.id === rentalId ? { ...r, status: 'cancelled' } : r
     ));
+    
+    // Increase available quantity
     setCostumes(costumes.map(c => 
-      c.id === rental.costumeId ? { ...c, available: true } : c
+      c.id === rental.costumeId 
+        ? { 
+            ...c, 
+            quantity: c.quantity + 1,
+            available: true
+          } 
+        : c
     ));
   };
 
@@ -96,7 +130,7 @@ function AppContent() {
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">Loading PEHENNAWA...</p>
         </div>
       </div>
     );
@@ -156,6 +190,8 @@ function AppContent() {
             onCancelRental={handleCancelRental}
           />
         );
+      case 'profile':
+        return <UserProfile />;
       default:
         return user.role === 'admin' ? (
           <AdminDashboard
