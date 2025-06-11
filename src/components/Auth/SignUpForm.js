@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import { Mail, Lock, User, UserPlus } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { Mail, Lock, User, UserPlus, Phone } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext.js';
 
-interface SignUpFormProps {
-  onSwitchToLogin: () => void;
-}
-
-const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
+const SignUpForm = ({ onSwitchToLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const { signup } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
@@ -22,7 +19,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
       return;
     }
 
-    const success = signup(email, password, name);
+    const success = signup(email, password, name, phone);
     if (!success) {
       setError('User with this email already exists');
     }
@@ -33,8 +30,8 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
-            <p className="text-gray-600">Join CostumeWorld today</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Join PEHENNAWA</h2>
+            <p className="text-gray-600">Create your account today</p>
           </div>
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -71,6 +68,23 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
                     onChange={(e) => setEmail(e.target.value)}
                     className="appearance-none relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                     placeholder="Enter your email"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                  Phone Number
+                </label>
+                <div className="mt-1 relative">
+                  <Phone className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <input
+                    id="phone"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="appearance-none relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    placeholder="Enter your phone number"
                   />
                 </div>
               </div>

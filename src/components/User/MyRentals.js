@@ -1,25 +1,17 @@
 import React from 'react';
 import { Calendar, Clock, DollarSign, Package } from 'lucide-react';
-import { Rental, Costume } from '../../types';
 
-interface MyRentalsProps {
-  rentals: Rental[];
-  costumes: Costume[];
-  onReturnCostume: (rentalId: string) => void;
-  onCancelRental: (rentalId: string) => void;
-}
-
-const MyRentals: React.FC<MyRentalsProps> = ({ 
+const MyRentals = ({ 
   rentals, 
   costumes, 
   onReturnCostume, 
   onCancelRental 
 }) => {
-  const getRentalCostume = (costumeId: string) => {
+  const getRentalCostume = (costumeId) => {
     return costumes.find(c => c.id === costumeId);
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'short',
       year: 'numeric',
@@ -28,7 +20,7 @@ const MyRentals: React.FC<MyRentalsProps> = ({
     });
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status) => {
     switch (status) {
       case 'active':
         return 'bg-emerald-100 text-emerald-800';

@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
-import { Mail, Lock, LogIn } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { Mail, Lock, LogIn, Crown } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext.js';
 
-interface LoginFormProps {
-  onSwitchToSignup: () => void;
-}
-
-const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
+const LoginForm = ({ onSwitchToSignup, onSwitchToAdmin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
@@ -27,7 +23,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to PEHENNAWA</h2>
             <p className="text-gray-600">Sign in to your account</p>
           </div>
 
@@ -84,7 +80,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
               Sign in
             </button>
 
-            <div className="text-center">
+            <div className="flex flex-col space-y-3 text-center">
               <button
                 type="button"
                 onClick={onSwitchToSignup}
@@ -92,11 +88,19 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
               >
                 Don't have an account? Sign up
               </button>
+              
+              <button
+                type="button"
+                onClick={onSwitchToAdmin}
+                className="flex items-center justify-center space-x-2 text-amber-600 hover:text-amber-500 text-sm font-medium"
+              >
+                <Crown className="h-4 w-4" />
+                <span>Admin Login</span>
+              </button>
             </div>
 
             <div className="mt-6 bg-gray-50 rounded-lg p-4">
               <p className="text-xs text-gray-600 mb-2">Demo credentials:</p>
-              <p className="text-xs text-gray-700">Admin: admin@costumeworld.com / password</p>
               <p className="text-xs text-gray-700">User: john@example.com / password</p>
             </div>
           </form>

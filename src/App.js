@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import Header from './components/Header';
-import LoginForm from './components/Auth/LoginForm';
-import SignUpForm from './components/Auth/SignUpForm';
-import AdminDashboard from './components/Admin/AdminDashboard';
-import AddCostume from './components/Admin/AddCostume';
-import CostumeCatalog from './components/User/CostumeCatalog';
-import MyRentals from './components/User/MyRentals';
-import RentalModal from './components/RentalModal';
-import { mockCostumes, mockRentals } from './data/mockData';
-import { Costume, Rental } from './types';
+import { AuthProvider, useAuth } from './contexts/AuthContext.js';
+import Header from './components/Header.js';
+import LoginForm from './components/Auth/LoginForm.js';
+import AdminLoginForm from './components/Auth/AdminLoginForm.js';
+import SignUpForm from './components/Auth/SignUpForm.js';
+import AdminDashboard from './components/Admin/AdminDashboard.js';
+import AddCostume from './components/Admin/AddCostume.js';
+import CostumeCatalog from './components/User/CostumeCatalog.js';
+import MyRentals from './components/User/MyRentals.js';
+import UserProfile from './components/User/UserProfile.js';
+import RentalModal from './components/RentalModal.js';
+import { mockCostumes, mockRentals } from './data/mockData.js';
 
 function AppContent() {
   const { user, isLoading } = useAuth();
   const [currentView, setCurrentView] = useState('');
-  const [authView, setAuthView] = useState<'login' | 'signup'>('login');
-  const [costumes, setCostumes] = useState<Costume[]>(mockCostumes);
-  const [rentals, setRentals] = useState<Rental[]>(mockRentals);
-  const [selectedCostume, setSelectedCostume] = useState<Costume | null>(null);
+  const [authView, setAuthView] = useState('login'); // 'login', 'admin', 'signup'
+  const [costumes, setCostumes] = useState(mockCostumes);
+  const [rentals, setRentals] = useState(mockRentals);
+  const [selectedCostume, setSelectedCostume] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -29,63 +30,96 @@ function AppContent() {
     }
   }, [user]);
 
-  const handleAddCostume = (newCostume: Omit<Costume, 'id'>) => {
-    const costume: Costume = {
+  const handleAddCostume = (newCostume) => {
+    const costume = {
       ...newCostume,
       id: Date.now().toString()
     };
     setCostumes([...costumes, costume]);
   };
 
-  const handleDeleteCostume = (costumeId: string) => {
+  const handleDeleteCostume = (costumeId) => {
     setCostumes(costumes.filter(c => c.id !== costumeId));
   };
 
-  const handleRentCostume = (costume: Costume) => {
+  const handleRentCostume = (costume) => {
     setSelectedCostume(costume);
   };
 
-  const handleConfirmRental = (startDate: string, endDate: string, totalCost: number) => {
+  const handleConfirmRental = (startDate, endDate, totalCost, paymentMethod) => {
     if (!user || !selectedCostume) return;
 
-    const newRental: Rental = {
+    const newRental = {
       id: Date.now().toString(),
       userId: user.id,
       costumeId: selectedCostume.id,
       startDate,
       endDate,
       status: 'active',
-      totalCost
+      totalCost,
+      paymentMethod
     };
 
     setRentals([...rentals, newRental]);
+    
+    // Decrease available quantity
     setCostumes(costumes.map(c => 
-      c.id === selectedCostume.id ? { ...c, available: false } : c
+      c.id === selectedCostume.id 
+        ? { 
+            ...c, 
+            quantity: c.quantity - 1,
+            available: c.quantity - 1 > 0
+          } 
+        : c
     ));
+    
     setSelectedCostume(null);
+
+    // Simulate payment processing for online payments
+    if (paymentMethod === 'online') {
+      alert('Payment processed successfully! Your costume rental is confirmed.');
+    } else {
+      alert('Rental confirmed! You can pay cash on delivery.');
+    }
   };
 
-  const handleReturnCostume = (rentalId: string) => {
+  const handleReturnCostume = (rentalId) => {
     const rental = rentals.find(r => r.id === rentalId);
     if (!rental) return;
 
     setRentals(rentals.map(r => 
       r.id === rentalId ? { ...r, status: 'returned' } : r
     ));
+    
+    // Increase available quantity
     setCostumes(costumes.map(c => 
-      c.id === rental.costumeId ? { ...c, available: true } : c
+      c.id === rental.costumeId 
+        ? { 
+            ...c, 
+            quantity: c.quantity + 1,
+            available: true
+          } 
+        : c
     ));
   };
 
-  const handleCancelRental = (rentalId: string) => {
+  const handleCancelRental = (rentalId) => {
     const rental = rentals.find(r => r.id === rentalId);
     if (!rental) return;
 
     setRentals(rentals.map(r => 
       r.id === rentalId ? { ...r, status: 'cancelled' } : r
     ));
+    
+    // Increase available quantity
     setCostumes(costumes.map(c => 
-      c.id === rental.costumeId ? { ...c, available: true } : c
+      c.id === rental.costumeId 
+        ? { 
+            ...c, 
+            quantity: c.quantity + 1,
+            available: true
+          } 
+        : c
     ));
   };
 
@@ -96,18 +130,35 @@ function AppContent() {
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">Loading PEHENNAWA...</p>
         </div>
       </div>
     );
   }
 
   if (!user) {
-    return authView === 'login' ? (
-      <LoginForm onSwitchToSignup={() => setAuthView('signup')} />
-    ) : (
-      <SignUpForm onSwitchToLogin={() => setAuthView('login')} />
-    );
+    switch (authView) {
+      case 'admin':
+        return (
+          <AdminLoginForm 
+            onSwitchToUser={() => setAuthView('login')} 
+          />
+        );
+      case 'signup':
+        return (
+          <SignUpForm 
+            onSwitchToLogin={() => setAuthView('login')} 
+          />
+        );
+      case 'login':
+      default:
+        return (
+          <LoginForm 
+            onSwitchToSignup={() => setAuthView('signup')}
+            onSwitchToAdmin={() => setAuthView('admin')}
+          />
+        );
+    }
   }
 
   const renderCurrentView = () => {
@@ -126,6 +177,8 @@ function AppContent() {
           <CostumeCatalog
             costumes={costumes}
             onRentCostume={handleRentCostume}
+            userRentals={userRentals}
+            allRentals={rentals}
           />
         );
       case 'my-rentals':
@@ -137,6 +190,8 @@ function AppContent() {
             onCancelRental={handleCancelRental}
           />
         );
+      case 'profile':
+        return <UserProfile />;
       default:
         return user.role === 'admin' ? (
           <AdminDashboard
@@ -147,6 +202,8 @@ function AppContent() {
           <CostumeCatalog
             costumes={costumes}
             onRentCostume={handleRentCostume}
+            userRentals={userRentals}
+            allRentals={rentals}
           />
         );
     }
@@ -164,6 +221,7 @@ function AppContent() {
           costume={selectedCostume}
           onClose={() => setSelectedCostume(null)}
           onConfirm={handleConfirmRental}
+          existingRentals={rentals}
         />
       )}
     </div>

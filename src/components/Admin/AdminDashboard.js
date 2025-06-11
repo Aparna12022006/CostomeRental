@@ -1,14 +1,9 @@
 import React from 'react';
 import { Package, Users, TrendingUp, Calendar } from 'lucide-react';
-import { mockCostumes, mockRentals, mockUsers } from '../../data/mockData';
-import CostumeCard from '../CostumeCard';
+import { mockRentals, mockUsers } from '../../data/mockData.js';
+import CostumeCard from '../CostumeCard.js';
 
-interface AdminDashboardProps {
-  costumes: typeof mockCostumes;
-  onDeleteCostume: (costumeId: string) => void;
-}
-
-const AdminDashboard: React.FC<AdminDashboardProps> = ({ costumes, onDeleteCostume }) => {
+const AdminDashboard = ({ costumes, onDeleteCostume }) => {
   const totalCostumes = costumes.length;
   const availableCostumes = costumes.filter(c => c.available).length;
   const totalUsers = mockUsers.filter(u => u.role === 'user').length;

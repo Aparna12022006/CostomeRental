@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
-import { Plus, Upload, Tag, DollarSign } from 'lucide-react';
-import { Costume } from '../../types';
+import { Plus, Upload, Tag, DollarSign, Package } from 'lucide-react';
 
-interface AddCostumeProps {
-  onAddCostume: (costume: Omit<Costume, 'id'>) => void;
-}
-
-const AddCostume: React.FC<AddCostumeProps> = ({ onAddCostume }) => {
+const AddCostume = ({ onAddCostume }) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -14,21 +9,25 @@ const AddCostume: React.FC<AddCostumeProps> = ({ onAddCostume }) => {
     size: '',
     price: '',
     image: '',
-    condition: 'excellent' as 'excellent' | 'good' | 'fair'
+    condition: 'excellent',
+    quantity: '',
+    totalQuantity: ''
   });
 
   const [success, setSuccess] = useState(false);
 
-  const categories = ['Historical', 'Fantasy', 'Superhero', 'Horror', 'Sci-Fi', 'Comedy', 'Other'];
+  const categories = ['Princess', 'Professional', 'Superhero', 'Fantasy', 'Horror', 'Sci-Fi', 'Comedy', 'Other'];
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
-    const newCostume: Omit<Costume, 'id'> = {
+    const newCostume = {
       ...formData,
       price: Number(formData.price),
-      available: true
+      quantity: Number(formData.quantity),
+      totalQuantity: Number(formData.totalQuantity),
+      available: Number(formData.quantity) > 0
     };
 
     onAddCostume(newCostume);
@@ -41,14 +40,16 @@ const AddCostume: React.FC<AddCostumeProps> = ({ onAddCostume }) => {
       size: '',
       price: '',
       image: '',
-      condition: 'excellent'
+      condition: 'excellent',
+      quantity: '',
+      totalQuantity: ''
     });
 
     setSuccess(true);
     setTimeout(() => setSuccess(false), 3000);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -59,7 +60,7 @@ const AddCostume: React.FC<AddCostumeProps> = ({ onAddCostume }) => {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Add New Costume</h1>
-        <p className="text-gray-600">Add a new costume to your inventory</p>
+        <p className="text-gray-600">Add a new costume to your PEHENNAWA inventory</p>
       </div>
 
       {success && (
@@ -146,6 +147,46 @@ const AddCostume: React.FC<AddCostumeProps> = ({ onAddCostume }) => {
             </div>
 
             <div>
+              <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-2">
+                Available Quantity *
+              </label>
+              <div className="relative">
+                <Package className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <input
+                  type="number"
+                  id="quantity"
+                  name="quantity"
+                  required
+                  min="0"
+                  value={formData.quantity}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Available quantity"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="totalQuantity" className="block text-sm font-medium text-gray-700 mb-2">
+                Total Quantity *
+              </label>
+              <div className="relative">
+                <Package className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <input
+                  type="number"
+                  id="totalQuantity"
+                  name="totalQuantity"
+                  required
+                  min="1"
+                  value={formData.totalQuantity}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Total quantity"
+                />
+              </div>
+            </div>
+
+            <div>
               <label htmlFor="condition" className="block text-sm font-medium text-gray-700 mb-2">
                 Condition *
               </label>
@@ -206,7 +247,9 @@ const AddCostume: React.FC<AddCostumeProps> = ({ onAddCostume }) => {
                 size: '',
                 price: '',
                 image: '',
-                condition: 'excellent'
+                condition: 'excellent',
+                quantity: '',
+                totalQuantity: ''
               })}
               className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
             >

@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AuthContextType, User } from '../types';
-import { mockUsers } from '../data/mockData';
+import { mockUsers } from '../data/mockData.js';
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext(undefined);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -12,12 +11,8 @@ export const useAuth = () => {
   return context;
 };
 
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -29,19 +24,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = (email: string, password: string): boolean => {
-    // Simple mock authentication
-    const foundUser = mockUsers.find(u => u.email === email);
+  const login = (email, password) => {
+    // Admin login with specific credentials
+    if (email === 'pehennawa@gmail.com' && password === '12251523@aasg') {
+      const adminUser = mockUsers.find(u => u.email === email);
+      if (adminUser) {
+        setUser(adminUser);
+        localStorage.setItem('currentUser', JSON.stringify(adminUser));
+        return true;
+      }
+    }
     
+    // Regular user login
+    const foundUser = mockUsers.find(u => u.email === email && u.role === 'user');
     if (foundUser && password === 'password') {
       setUser(foundUser);
       localStorage.setItem('currentUser', JSON.stringify(foundUser));
       return true;
     }
+    
     return false;
   };
 
-  const signup = (email: string, password: string, name: string): boolean => {
+  const signup = (email, password, name, phone) => {
     // Check if user already exists
     const existingUser = mockUsers.find(u => u.email === email);
     if (existingUser) {
@@ -49,10 +54,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
 
     // Create new user
-    const newUser: User = {
+    const newUser = {
       id: Date.now().toString(),
       email,
       name,
+      phone: phone || '',
       role: 'user'
     };
 
@@ -62,13 +68,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return true;
   };
 
+  const updateProfile = (updatedData) => {
+    if (!user) return false;
+
+    const updatedUser = { ...user, ...updatedData };
+    
+    // Update in mockUsers array
+    const userIndex = mockUsers.findIndex(u => u.id === user.id);
+    if (userIndex !== -1) {
+      mockUsers[userIndex] = updatedUser;
+    }
+
+    setUser(updatedUser);
+    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+    return true;
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('currentUser');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, signup, isLoading }}>
+    <AuthContext.Provider value={{ user, login, logout, signup, updateProfile, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

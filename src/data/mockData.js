@@ -1,24 +1,22 @@
-import { UserRole, CostumeCondition, RentalStatus } from '../types/index.js';
-
 export const mockUsers = [
   {
     id: '1',
     email: 'pehennawa@gmail.com',
     name: 'PEHENNAWA Admin',
-    role: UserRole.ADMIN
+    role: 'admin'
   },
   {
     id: '2',
     email: 'john@example.com',
     name: 'John Doe',
-    role: UserRole.USER,
+    role: 'user',
     phone: '+1-555-0123'
   },
   {
     id: '3',
     email: 'jane@example.com',
     name: 'Jane Smith',
-    role: UserRole.USER,
+    role: 'user',
     phone: '+1-555-0124'
   }
 ];
@@ -33,7 +31,7 @@ export const mockCostumes = [
     price: 25,
     image: 'https://images.pexels.com/photos/8088495/pexels-photo-8088495.jpeg',
     available: true,
-    condition: CostumeCondition.EXCELLENT,
+    condition: 'excellent',
     quantity: 3,
     totalQuantity: 3
   },
@@ -46,7 +44,7 @@ export const mockCostumes = [
     price: 20,
     image: 'https://images.pexels.com/photos/8088496/pexels-photo-8088496.jpeg',
     available: true,
-    condition: CostumeCondition.EXCELLENT,
+    condition: 'excellent',
     quantity: 4,
     totalQuantity: 4
   },
@@ -59,7 +57,7 @@ export const mockCostumes = [
     price: 30,
     image: 'https://images.pexels.com/photos/8088497/pexels-photo-8088497.jpeg',
     available: false,
-    condition: CostumeCondition.GOOD,
+    condition: 'good',
     quantity: 0,
     totalQuantity: 2
   },
@@ -72,7 +70,7 @@ export const mockCostumes = [
     price: 22,
     image: 'https://images.pexels.com/photos/8088498/pexels-photo-8088498.jpeg',
     available: true,
-    condition: CostumeCondition.GOOD,
+    condition: 'good',
     quantity: 2,
     totalQuantity: 3
   },
@@ -85,7 +83,7 @@ export const mockCostumes = [
     price: 28,
     image: 'https://images.pexels.com/photos/8088499/pexels-photo-8088499.jpeg',
     available: true,
-    condition: CostumeCondition.EXCELLENT,
+    condition: 'excellent',
     quantity: 3,
     totalQuantity: 3
   },
@@ -98,7 +96,7 @@ export const mockCostumes = [
     price: 18,
     image: 'https://images.pexels.com/photos/8088500/pexels-photo-8088500.jpeg',
     available: true,
-    condition: CostumeCondition.GOOD,
+    condition: 'good',
     quantity: 5,
     totalQuantity: 5
   },
@@ -111,7 +109,7 @@ export const mockCostumes = [
     price: 26,
     image: 'https://images.pexels.com/photos/8088501/pexels-photo-8088501.jpeg',
     available: true,
-    condition: CostumeCondition.EXCELLENT,
+    condition: 'excellent',
     quantity: 2,
     totalQuantity: 2
   },
@@ -124,7 +122,7 @@ export const mockCostumes = [
     price: 24,
     image: 'https://images.pexels.com/photos/8088502/pexels-photo-8088502.jpeg',
     available: true,
-    condition: CostumeCondition.EXCELLENT,
+    condition: 'excellent',
     quantity: 4,
     totalQuantity: 4
   }
@@ -137,7 +135,7 @@ export const mockRentals = [
     costumeId: '3',
     startDate: '2024-12-20',
     endDate: '2024-12-22',
-    status: RentalStatus.ACTIVE,
+    status: 'active',
     totalCost: 60,
     paymentMethod: 'online'
   },
@@ -147,7 +145,7 @@ export const mockRentals = [
     costumeId: '1',
     startDate: '2024-11-15',
     endDate: '2024-11-17',
-    status: RentalStatus.RETURNED,
+    status: 'returned',
     totalCost: 50,
     paymentMethod: 'cod'
   },
@@ -157,7 +155,7 @@ export const mockRentals = [
     costumeId: '2',
     startDate: '2024-10-31',
     endDate: '2024-11-02',
-    status: RentalStatus.RETURNED,
+    status: 'returned',
     totalCost: 40,
     paymentMethod: 'online'
   }

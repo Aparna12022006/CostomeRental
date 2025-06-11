@@ -1,13 +1,8 @@
 import React from 'react';
 import { LogOut, Crown, User, Shirt } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.js';
 
-interface HeaderProps {
-  currentView: string;
-  onViewChange: (view: string) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
+const Header = ({ currentView, onViewChange }) => {
   const { user, logout } = useAuth();
 
   return (
@@ -17,7 +12,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
           <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-2">
               <Shirt className="h-8 w-8 text-purple-600" />
-              <h1 className="text-2xl font-bold text-gray-900">CostumeWorld</h1>
+              <h1 className="text-2xl font-bold text-gray-900">PEHENNAWA</h1>
             </div>
             
             <nav className="hidden md:flex space-x-6">
@@ -65,6 +60,16 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
                     }`}
                   >
                     My Rentals
+                  </button>
+                  <button
+                    onClick={() => onViewChange('profile')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      currentView === 'profile'
+                        ? 'bg-purple-100 text-purple-700'
+                        : 'text-gray-600 hover:text-purple-600'
+                    }`}
+                  >
+                    Profile
                   </button>
                 </>
               )}
